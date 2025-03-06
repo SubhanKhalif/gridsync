@@ -4,125 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <!-- Tailwind CSS CDN for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *:before, *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #080710;
+        }
+        .background {
+            width: 430px;
+            height: 520px;
+            position: absolute;
+            transform: translate(-50%,-50%);
+            left: 50%;
+            top: 50%;
+        }
+        .background .shape {
+            height: 200px;
+            width: 200px;
+            position: absolute;
+            border-radius: 50%;
+        }
+        .shape:first-child {
+            background: linear-gradient(#1845ad, #23a2f6);
+            left: -80px;
+            top: -80px;
+        }
+        .shape:last-child {
+            background: linear-gradient(to right, #ff512f, #f09819);
+            right: -30px;
+            bottom: -80px;
+        }
+        form {
+            height: 520px;
+            width: 400px;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        form * {
+            font-family: 'Poppins',sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        form h3 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-top: 30px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input {
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        ::placeholder {
+            color: #e5e5e5;
+        }
+        button {
+            margin-top: 50px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .social {
+            margin-top: 30px;
+            display: flex;
+        }
+        .social div {
+            width: 150px;
+            border-radius: 3px;
+            padding: 5px 10px 10px 5px;
+            background-color: rgba(255,255,255,0.27);
+            color: #eaf0fb;
+            text-align: center;
+        }
+        .social div:hover {
+            background-color: rgba(255,255,255,0.47);
+        }
+        .social .fb {
+            margin-left: 25px;
+        }
+        .social i {
+            margin-right: 4px;
+        }
+        .signup-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .signup-link a {
+            color: #23a2f6;
+            text-decoration: none;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-
-    <div class="flex justify-center items-center min-h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-            <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
-
-            <!-- Login form -->
-            <form id="login-form" method="POST" class="space-y-4">
-                <!-- Username input -->
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" name="username" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-
-                <!-- Password input -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                </div>
-
-                <!-- Submit button -->
-                <div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Login</button>
-                </div>
-            </form>
-
-            <p class="mt-4 text-center text-sm text-gray-600">
-                Don't have an account? 
-                <a href="signup.html" class="text-indigo-600 hover:text-indigo-800">Sign up here</a>
-            </p>
-        </div>
+<body>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
     </div>
+    <form id="login-form" method="POST">
+        <h3>Login Here</h3>
 
-<script>
-    const BASE_URL = "https://gridsync.onrender.com"; // Your backend URL
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required placeholder="Username">
 
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-        event.preventDefault();
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required placeholder="Password">
+
+        <button type="submit">Log In</button>
         
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html">Sign up here</a>
+        </div>
+    </form>
 
-        // Data validation
-        if (!username || !password) {
-            alert('Please enter both username and password');
-            return;
-        }
+    <script>
+        const BASE_URL = "https://gridsync.onrender.com";
 
-        try {
-            const response = await fetch(`${BASE_URL}/api/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
+        document.getElementById('login-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
 
-            // Check if the response is okay
-            if (!response.ok) {
-                const text = await response.text();
-                
-                // Handle the case where HTML response is returned (shouldn't happen)
-                if (text.startsWith('<!DOCTYPE')) {
-                    throw new Error('Server sent HTML response. Please check server configuration.');
-                }
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
 
-                // Parse JSON response to get error details
-                let errorData;
-                try {
-                    errorData = JSON.parse(text);
-                    console.error('Server error details:', errorData);
+            try {
+                const response = await fetch(`${BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
                     
-                    if (errorData.errorCode === "USER_NOT_FOUND") {
-                        throw new Error('User not found');
-                    } else if (errorData.errorCode === "INVALID_CREDENTIALS") {
-                        throw new Error('Invalid credentials');
-                    } else if (errorData.errorCode === "SESSION_NOT_AVAILABLE") {
-                        throw new Error('Session management not available');
+                    if (text.startsWith('<!DOCTYPE')) {
+                        throw new Error('Server sent HTML response. Please check server configuration.');
                     }
-                } catch (parseError) {
-                    console.error('Response parsing error:', parseError);
-                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
-                }
-                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-            }
 
-            const data = await response.json();
-            
-            if (data.success) {
-                // Save user data and authentication status in local storage
-                localStorage.setItem('authenticated', true);
-                localStorage.setItem('user', JSON.stringify(data.user));
+                    let errorData;
+                    try {
+                        errorData = JSON.parse(text);
+                        console.error('Server error details:', errorData);
+                        
+                        if (errorData.errorCode === "USER_NOT_FOUND") {
+                            throw new Error('User not found');
+                        } else if (errorData.errorCode === "INVALID_CREDENTIALS") {
+                            throw new Error('Invalid credentials');
+                        } else if (errorData.errorCode === "SESSION_NOT_AVAILABLE") {
+                            throw new Error('Session management not available');
+                        }
+                    } catch (parseError) {
+                        console.error('Response parsing error:', parseError);
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                    throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
                 
-                // Redirect to the main page after successful login
-                window.location.href = 'index.html';
-            } else {
-                throw new Error(data.message || 'Invalid credentials');
+                if (data.success) {
+                    localStorage.setItem('authenticated', true);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    window.location.href = 'index.html';
+                } else {
+                    throw new Error(data.message || 'Invalid credentials');
+                }
+            } catch (error) {
+                console.error('Error details:', error);
+                
+                let errorMessage = 'Login error: ';
+                if (error.message.includes('500') || error.message.includes('configuration') || error.message.includes('HTML response')) {
+                    errorMessage += 'Server configuration error. Please restart the server.';
+                } else if (error.message.includes('401') || error.message.includes('Invalid credentials') || error.message.includes('User not found')) {
+                    errorMessage += 'Incorrect username or password';
+                } else if (error.message.includes('Session management')) {
+                    errorMessage += 'Session management error. Please try again.';
+                } else {
+                    errorMessage += error.message || 'An unknown error occurred.';
+                }
+                alert(errorMessage);
             }
-        } catch (error) {
-            console.error('Error details:', error);
-            
-            // User-friendly error message
-            let errorMessage = 'Login error: ';
-            if (error.message.includes('500') || error.message.includes('configuration') || error.message.includes('HTML response')) {
-                errorMessage += 'Server configuration error. Please restart the server.';
-            } else if (error.message.includes('401') || error.message.includes('Invalid credentials') || error.message.includes('User not found')) {
-                errorMessage += 'Incorrect username or password';
-            } else if (error.message.includes('Session management')) {
-                errorMessage += 'Session management error. Please try again.';
-            } else {
-                errorMessage += error.message || 'An unknown error occurred.';
-            }
-            alert(errorMessage);
-        }
-    });
-</script>
-<script src="script2.js" defer></script>
+        });
+    </script>
+    <script src="script2.js" defer></script>
 </body>
 </html>
