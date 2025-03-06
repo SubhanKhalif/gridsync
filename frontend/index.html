@@ -6,25 +6,44 @@
   <link id='favicon' rel="shortcut icon" href="./assets/favicon.png" type="image/x-png">
   <title>GridSync | Home</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4" style="background-image: url('./assets/'); background-repeat: no-repeat; background-position: center; background-size: contain;">
-    <button onclick="handleLogout()" class="absolute top-4 right-4 bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded transition duration-300">🚪 Logout</button>
-
-    <div class="w-full max-w-md bg-white/30 shadow-md p-6 rounded-lg backdrop-blur-">
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Private Sheets</h1>
-    
-    <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">Select Sheet</h2>
-
-    <div id="sheet-buttons" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"></div>
-
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="addNewSheet()" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-300">➕ Add New Sheet</button>
-      <button id="delete-sheet" class="flex-1 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded transition duration-300">🗑 Delete Sheet</button>
+<body class="bg-[#080710] font-inter flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="fixed top-0 left-0 right-0 bg-gray-800/80 backdrop-blur-sm shadow-sm py-3 px-6 flex justify-end">
+        <button onclick="handleLogout()" class="flex items-center space-x-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-all duration-300 hover:shadow-lg">
+            <span>🚪</span>
+            <span>Logout</span>
+        </button>
     </div>
-  </div>
-  <h1 class="fixed bottom-0 right-0 p-4 text-gray-600">Developed by Techspot Infotech LLP</h1>
 
-  <script>
+    <div class="w-full max-w-2xl bg-gray-800/90 backdrop-blur-lg shadow-xl rounded-2xl p-8 border border-gray-700">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-100 mb-2">Your Private Sheets</h1>
+            <p class="text-gray-300">Organize and manage your data efficiently</p>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-xl font-semibold text-gray-200 mb-4">Select Sheet</h2>
+            <div id="sheet-buttons" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[300px] overflow-y-auto"></div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+            <button onclick="addNewSheet()" class="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg">
+                <span>➕</span>
+                <span>Add New Sheet</span>
+            </button>
+            <button id="delete-sheet" class="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-red-700 to-red-800 hover:from-red-800 hover:to-red-900 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg">
+                <span>🗑</span>
+                <span>Delete Sheet</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-800/80 backdrop-blur-sm py-3 px-6 text-center">
+        <p class="text-gray-300 text-sm">Developed with ❤️ by Techspot Infotech LLP</p>
+    </div>
+
+    <script>
     const BASE_URL = "https://gridsync.onrender.com";
 
     // Function to check server connection
@@ -72,7 +91,7 @@
     // On page load
     window.addEventListener('DOMContentLoaded', async (event) => {
         if (!localStorage.getItem('authenticated')) {
-            window.location.href = 'login.html';
+            window.location.href = 'home.html';
             return;
         }
 
@@ -110,7 +129,7 @@
     async function addNewSheet() {
         if (!await checkServerConnection()) return;
 
-        const sheetName = prompt("Enter new sheet name:");
+        const sheetName = prompt="Enter new sheet name:";
         if (!sheetName) return;
 
         try {
@@ -148,17 +167,24 @@
             sheetContainer.innerHTML = '';
 
             if (sheets.length === 0) {
-                sheetContainer.innerHTML = `<p class="text-gray-500 text-center">No sheets available.</p>`;
+                sheetContainer.innerHTML = `<p class="text-gray-300 text-center">No sheets available. Create one to get started!</p>`;
                 return;
             }
 
             sheets.forEach(sheet => {
                 const button = document.createElement('button');
                 button.innerText = sheet;
-                button.className = 'bg-blue-500 hover:bg-blue-600 text-white p-3 rounded w-full text-center transition duration-300';
+                button.className = 'flex items-center justify-center bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-xl w-full text-center transition-all duration-300 hover:shadow-lg';
                 button.onclick = () => setCollection(sheet);
                 sheetContainer.appendChild(button);
             });
+
+            // Add scrollable class if more than 9 sheets
+            if (sheets.length > 9) {
+                sheetContainer.classList.add('overflow-y-auto');
+            } else {
+                sheetContainer.classList.remove('overflow-y-auto');
+            }
         } catch (error) {
             console.error('Error loading sheets:', error);
             alert('Error loading sheets. Please try again later.');
@@ -181,7 +207,7 @@
     function handleLogout() {
         localStorage.removeItem('authenticated');
         clearTimeout(logoutTimer);
-        window.location.href = 'login.html';
+        window.location.href = 'home.html';
     }
 
     // Start timer on page load

@@ -1,7 +1,14 @@
 const BASE_URL = "https://gridsync.onrender.com/api";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    // Apply dark mode styles
+    document.body.style.backgroundColor = "#080710";
+    document.body.style.color = "#ffffff";
+    
     const spreadsheetContainer = document.getElementById("spreadsheet-container");
+    spreadsheetContainer.style.backgroundColor = "#080710";
+    spreadsheetContainer.style.color = "#ffffff";
+
     const addRowBtn = document.getElementById("add-row");
     const addColBtn = document.getElementById("add-col");
     const deleteRowBtn = document.getElementById("delete-row");
@@ -40,6 +47,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     function renderTable() {
         spreadsheetContainer.innerHTML = "";
         const table = document.createElement("table");
+        table.style.backgroundColor = "#080710";
+        table.style.color = "#ffffff";
         table.appendChild(createHeader());
         table.appendChild(createBody());
         spreadsheetContainer.appendChild(table);
@@ -53,7 +62,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         for (let j = 0; j <= columns; j++) {
             const th = document.createElement("th");
             th.innerText = j === 0 ? "Sr No" : j;
-            Object.assign(th.style, { position: "sticky", top: "0", backgroundColor: "#d3d3d3", zIndex: "2" });
+            Object.assign(th.style, { 
+                position: "sticky", 
+                top: "0", 
+                backgroundColor: "#1a1a1a", 
+                color: "#ffffff",
+                zIndex: "2" 
+            });
             if (j === 0) th.style.left = "0";
             headerRow.appendChild(th);
         }
@@ -69,13 +84,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const td = document.createElement("td");
                 td.dataset.row = i;
                 td.dataset.col = j;
+                td.style.backgroundColor = "#080710";
+                td.style.color = "#ffffff";
 
                 if (j === 0) {
                     td.innerText = i;
                     Object.assign(td.style, {
                         position: "sticky",
                         left: "0",
-                        backgroundColor: "#d3d3d3",
+                        backgroundColor: "#1a1a1a",
+                        color: "#ffffff",
                         fontWeight: "bold",
                         zIndex: "3"
                     });
