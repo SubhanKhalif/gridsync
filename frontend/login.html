@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+    <div class="flex justify-center items-center min-h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
+
+            <!-- Login form -->
+            <form id="login-form" method="POST" class="space-y-4">
+                <!-- Username input -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" name="username" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <!-- Password input -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <!-- Submit button -->
+                <div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Login</button>
+                </div>
+            </form>
+
+            <p class="mt-4 text-center text-sm text-gray-600">
+                Don't have an account? 
+                <a href="signup.html" class="text-indigo-600 hover:text-indigo-800">Sign up here</a>
+            </p>
+        </div>
+    </div>
+
+<script>
+    const BASE_URL = "http://localhost:5000"; // Your backend URL
+
+    document.getElementById('login-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Data validation
+        if (!username || !password) {
+            alert('Please enter both username and password');
+            return;
+        }
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            // Check if the response is okay
+            if (!response.ok) {
+                const text = await response.text();
+                
+                // Handle the case where HTML response is returned (shouldn't happen)
+                if (text.startsWith('<!DOCTYPE')) {
+                    throw new Error('Server sent HTML response. Please check server configuration.');
+                }
+
+                // Parse JSON response to get error details
+                let errorData;
+                try {
+                    errorData = JSON.parse(text);
+                    console.error('Server error details:', errorData);
+                    
+                    if (errorData.errorCode === "USER_NOT_FOUND") {
+                        throw new Error('User not found');
+                    } else if (errorData.errorCode === "INVALID_CREDENTIALS") {
+                        throw new Error('Invalid credentials');
+                    } else if (errorData.errorCode === "SESSION_NOT_AVAILABLE") {
+                        throw new Error('Session management not available');
+                    }
+                } catch (parseError) {
+                    console.error('Response parsing error:', parseError);
+                    throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                }
+                throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.success) {
+                // Save user data and authentication status in local storage
+                localStorage.setItem('authenticated', true);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                // Redirect to the main page after successful login
+                window.location.href = 'index.html';
+            } else {
+                throw new Error(data.message || 'Invalid credentials');
+            }
+        } catch (error) {
+            console.error('Error details:', error);
+            
+            // User-friendly error message
+            let errorMessage = 'Login error: ';
+            if (error.message.includes('500') || error.message.includes('configuration') || error.message.includes('HTML response')) {
+                errorMessage += 'Server configuration error. Please restart the server.';
+            } else if (error.message.includes('401') || error.message.includes('Invalid credentials') || error.message.includes('User not found')) {
+                errorMessage += 'Incorrect username or password';
+            } else if (error.message.includes('Session management')) {
+                errorMessage += 'Session management error. Please try again.';
+            } else {
+                errorMessage += error.message || 'An unknown error occurred.';
+            }
+            alert(errorMessage);
+        }
+    });
+</script>
+<script src="script2.js" defer></script>
+</body>
+</html>

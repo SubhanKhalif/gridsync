@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridSync | Spreadsheet</title>
+    <link id='favicon' rel="shortcut icon" href="./assets/favicon.png" type="image/x-png">
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Spreadsheet Container */
+        #spreadsheet-container {
+            width: 100%;
+            height: calc(100vh - 180px);
+            overflow: auto;
+            position: relative;
+            border: 1px solid #ccc;
+            background: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table Styling */
+        table {
+            border-collapse: collapse;
+            width: max-content;
+            min-width: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+            font-size: 14px;
+            min-width: 100px;
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Header Styling */
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            border-bottom: 2px solid #ccc;
+        }
+
+        /* Fixed Row Headers */
+        td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #f4f4f4;
+            font-weight: bold;
+            z-index: 3;
+            border-right: 2px solid #ccc;
+        }
+
+        /* Row 0 Styling (Editable & Sticky) */
+        tr:nth-child(1) td {
+            font-weight: bold;
+            background-color: #e8e8e8;
+            color: black;
+            position: sticky;
+            top: 35px;
+            z-index: 3;
+        }
+
+        /* Alternating Row Colors (Excel-like) */
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* Hover Effect */
+        th:hover, td:hover {
+            background-color: #f0f9ff;
+            cursor: pointer;
+        }
+
+        /* Resizable Columns */
+        .resize-handle {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            cursor: col-resize;
+            z-index: 5;
+        }
+
+        .resize-handle:hover {
+            background: #ddd;
+        }
+
+        /* Highlight Found Cells */
+        .highlight {
+            background-color: yellow !important;
+        }
+
+        /* Multi-Selection Highlight */
+        .selected {
+            background-color: lightblue !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-5">
+        <!-- Sheet Title -->
+        <div class="flex justify-between items-center mb-4">
+            <h1 id="sheet-title" class="text-2xl font-bold"></h1>
+
+            <!-- Search Box -->
+            <input 
+                type="text" 
+                id="search-input" 
+                placeholder="🔍 Search in sheet..." 
+                class="px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Controls -->
+        <div id="spreadsheet-controls" class="flex flex-wrap gap-3 mb-4">
+<!-- Controls -->
+<div id="spreadsheet-controls" class="flex flex-wrap gap-3 mb-4">
+    <button id="add-row" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded shadow">➕ Add Row</button>
+    <button id="add-col" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded shadow">➕ Add Column</button>
+    <button id="delete-row" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded shadow">🗑 Delete Row</button>
+    <button id="delete-column" class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2 rounded shadow">🗑 Delete Column</button>
+    <button id="undo" class="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded shadow">⏪ Undo</button>
+    <button id="redo" class="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded shadow">⏩ Redo</button>
+    <button id="export-xlsx" class="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded shadow">📤 Export to Excel</button>
+</div>
+
+        </div>
+
+        <!-- Spreadsheet -->
+        <div id="spreadsheet-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="script1.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const sheetTitle = document.getElementById("sheet-title");
+    const activeSheet = localStorage.getItem("activeCollection");
+
+    if (activeSheet) {
+        sheetTitle.innerText = `Active Sheet: ${activeSheet}`;
+    } else {
+        sheetTitle.innerText = "No Sheet Selected";
+    }
+});
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    if (!localStorage.getItem('authenticated')) {
+        if (window.location.pathname !== '/login.html') {
+            window.location.replace('login.html'); // Redirect to login page if not authenticated
+        }
+    }
+});
+    </script>
+    <script src="script2.js" defer></script>
+</body>
+</html>

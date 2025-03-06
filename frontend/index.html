@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link id='favicon' rel="shortcut icon" href="./assets/favicon.png" type="image/x-png">
+  <title>GridSync | Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-4" style="background-image: url('./assets/'); background-repeat: no-repeat; background-position: center; background-size: contain;">
+    <button onclick="handleLogout()" class="absolute top-4 right-4 bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded transition duration-300">🚪 Logout</button>
+
+    <div class="w-full max-w-md bg-white/30 shadow-md p-6 rounded-lg backdrop-blur-">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Private Sheets</h1>
+    
+    <h2 class="text-lg font-semibold text-gray-700 mb-4 text-center">Select Sheet</h2>
+
+    <div id="sheet-buttons" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4"></div>
+
+    <div class="flex flex-col sm:flex-row gap-3">
+      <button onclick="addNewSheet()" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-300">➕ Add New Sheet</button>
+      <button id="delete-sheet" class="flex-1 bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded transition duration-300">🗑 Delete Sheet</button>
+    </div>
+  </div>
+  <h1 class="fixed bottom-0 right-0 p-4 text-gray-600">Developed by Techspot Infotech LLP</h1>
+
+  <script>
+    const BASE_URL = "http://localhost:5000";
+
+    // Function to check server connection
+    async function checkServerConnection() {
+        try {
+            const response = await fetch(`${BASE_URL}/api/health`);
+            if (!response.ok) throw new Error('Server not available');
+            return true;
+        } catch (error) {
+            console.error('Server connection error:', error);
+            alert('Unable to connect to server. Please try again later.');
+            return false;
+        }
+    }
+
+    async function deleteSheet() {
+        if (!await checkServerConnection()) return;
+
+        const sheetName = prompt("Enter sheet name to delete:");
+        if (!sheetName) return;
+
+        const confirmDelete = confirm(`Are you sure you want to delete "${sheetName}" sheet?`);
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/deleteSheet`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sheetName }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            alert(result.message);
+            loadSheets();
+        } catch (error) {
+            console.error('Error deleting sheet:', error);
+            alert('Error deleting sheet. Please try again later.');
+        }
+    }
+
+    // On page load
+    window.addEventListener('DOMContentLoaded', async (event) => {
+        if (!localStorage.getItem('authenticated')) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        if (window.location.pathname === '/login.html') {
+            history.replaceState({}, '', '/');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        if (await checkServerConnection()) {
+            loadSheets();
+        }
+    });
+
+    document.getElementById("delete-sheet").addEventListener("click", deleteSheet);
+
+    async function setCollection(collectionName) {
+        if (!await checkServerConnection()) return;
+
+        localStorage.setItem('activeCollection', collectionName);
+
+        try {
+            await fetch(`${BASE_URL}/api/setCollection`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ collection: collectionName }),
+            });
+            window.location.href = 'sheet.html';
+        } catch (error) {
+            console.error('Error setting collection:', error);
+            alert('Error setting collection.');
+        }
+    }
+
+    async function addNewSheet() {
+        if (!await checkServerConnection()) return;
+
+        const sheetName = prompt("Enter new sheet name:");
+        if (!sheetName) return;
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/addSheet`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sheetName }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            if (result.success) {
+                loadSheets();
+            } else {
+                alert(result.message || "Error adding sheet!");
+            }
+        } catch (error) {
+            console.error('Error adding sheet:', error);
+            alert('Error adding sheet. Please try again later.');
+        }
+    }
+
+    async function loadSheets() {
+        try {
+            const response = await fetch(`${BASE_URL}/api/getSheets`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const { sheets } = await response.json();
+            const sheetContainer = document.getElementById('sheet-buttons');
+            sheetContainer.innerHTML = '';
+
+            if (sheets.length === 0) {
+                sheetContainer.innerHTML = `<p class="text-gray-500 text-center">No sheets available.</p>`;
+                return;
+            }
+
+            sheets.forEach(sheet => {
+                const button = document.createElement('button');
+                button.innerText = sheet;
+                button.className = 'bg-blue-500 hover:bg-blue-600 text-white p-3 rounded w-full text-center transition duration-300';
+                button.onclick = () => setCollection(sheet);
+                sheetContainer.appendChild(button);
+            });
+        } catch (error) {
+            console.error('Error loading sheets:', error);
+            alert('Error loading sheets. Please try again later.');
+        }
+    }
+
+    let logoutTimer;
+
+    function startLogoutTimer() {
+        logoutTimer = setTimeout(() => {
+            handleLogout();
+        }, 600000); // 10 minutes (600000 milliseconds)
+    }
+
+    function resetLogoutTimer() {
+        clearTimeout(logoutTimer);
+        startLogoutTimer();
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('authenticated');
+        clearTimeout(logoutTimer);
+        window.location.href = 'login.html';
+    }
+
+    // Start timer on page load
+    startLogoutTimer();
+
+    // Reset timer on user interaction
+    document.addEventListener('click', resetLogoutTimer);
+    document.addEventListener('keypress', resetLogoutTimer);
+  </script>
+<script src="script2.js" defer></script>
+</body>
+</html>
