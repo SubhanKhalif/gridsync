@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://gridsync.onrender.com/api";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const spreadsheetContainer = document.getElementById("spreadsheet-container");
