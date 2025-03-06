@@ -1,4 +1,4 @@
-# 🚀 Dynamic Spreadsheet Web App
+# 🚀 GridSync - Dynamic Spreadsheet Web App
 
 ![Project License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen)
@@ -34,8 +34,8 @@ A **dynamic spreadsheet web app** built using **Node.js, Express, MongoDB, and R
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/dynamic-spreadsheet.git
-cd dynamic-spreadsheet
+git clone https://github.com/SubhanKhalif/gridsync.git
+cd gridsync
 ```
 
 ### 2️⃣ Install Dependencies
@@ -88,8 +88,8 @@ http://localhost:5000
 We welcome contributions! Feel free to fork the repository and submit pull requests.
 
 ```bash
-git clone https://github.com/your-username/dynamic-spreadsheet.git
-cd dynamic-spreadsheet
+git clone https://github.com/SubhanKhalif/gridsync.git
+cd gridsync
 git checkout -b feature-branch
 ```
 
@@ -104,7 +104,7 @@ This project is licensed under the MIT License.
 ### ❤️ Support the Project
 If you like this project, don't forget to **star** ⭐ the repository!
 
-[![GitHub Stars](https://img.shields.io/github/stars/your-username/dynamic-spreadsheet?style=social)](https://github.com/your-username/dynamic-spreadsheet)
+[![GitHub Stars](https://img.shields.io/github/stars/SubhanKhalif/gridsync?style=social)](https://github.com/SubhanKhalif/gridsync)
 
 ---
 
